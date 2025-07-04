@@ -6,7 +6,6 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js"; // ✅ Import auth routes
-
 // Import route handlers
 import documentRoutes from "./routes/documents.js";
 import signatureRoutes from "./routes/signatures.js";
@@ -76,6 +75,31 @@ app.use(
   },
   express.static(savedSignDir)
 );
+
+// ✅ Root route for health check
+app.get("/", (req, res) => {
+  res.json({ 
+    message: "DocSign Backend is running! 🚀",
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      auth: "/api/auth",
+      documents: "/api/docs",
+      signatures: "/api/signatures",
+      email: "/api/email",
+      signedDocs: "/api/signed-docs"
+    }
+  });
+});
+
+// ✅ Health check endpoint
+app.get("/health", (req, res) => {
+  res.json({ 
+    status: "ok",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
+});
 
 // ✅ API routes
 app.use("/api/docs", documentRoutes);
