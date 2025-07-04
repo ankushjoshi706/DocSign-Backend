@@ -1,7 +1,7 @@
-const express = require("express");
-const Signature = require("../models/Signature");
-const auth = require("../middleware/authMiddleware");
-const { finalizePdf } = require("../utils/pdfSigner");
+import express from "express";
+import Signature from "../models/Signature.js";
+import auth from "../middleware/authMiddleware.js";
+import { finalizePdf } from "../utils/pdfSigner.js";
 
 const router = express.Router();
 
@@ -47,9 +47,10 @@ router.post("/finalize", async (req, res) => {
       dateY
     );
     res.json({ file: output });
-  } catch {
+  } catch (err) {
+    console.error("❌ PDF finalization error:", err);
     res.status(500).send("Signature embedding failed.");
   }
 });
 
-module.exports = router;
+export default router;
