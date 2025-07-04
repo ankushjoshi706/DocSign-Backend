@@ -1,8 +1,25 @@
-const fs = require("fs");
-const path = require("path");
-const { PDFDocument, rgb, StandardFonts } = require("pdf-lib");
+import fs from "fs";
+import path from "path";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { fileURLToPath } from "url";
 
-async function finalizePdf(fileName, x, y, page, signatureDataURL, signerName, nameX, nameY, signedDate, dateX, dateY) {
+// For __dirname in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export async function finalizePdf(
+  fileName,
+  x,
+  y,
+  page,
+  signatureDataURL,
+  signerName,
+  nameX,
+  nameY,
+  signedDate,
+  dateX,
+  dateY
+) {
   const filePath = path.join(__dirname, "../uploads", fileName);
   const pdfBytes = fs.readFileSync(filePath);
   const pdfDoc = await PDFDocument.load(pdfBytes);
@@ -42,5 +59,3 @@ async function finalizePdf(fileName, x, y, page, signatureDataURL, signerName, n
   fs.writeFileSync(outputPath, outputBytes);
   return outputFile;
 }
-
-module.exports = { finalizePdf };
