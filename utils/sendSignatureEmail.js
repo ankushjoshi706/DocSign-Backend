@@ -1,7 +1,6 @@
-// utils/mailer.js
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 
-async function sendSignatureRequestEmail(sender, recipient, link) {
+export async function sendSignatureRequestEmail(sender, recipient, link) {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -24,5 +23,3 @@ async function sendSignatureRequestEmail(sender, recipient, link) {
 
   return transporter.sendMail(mailOptions);
 }
-
-module.exports = { sendSignatureRequestEmail };
