@@ -1,7 +1,7 @@
-const express = require("express");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-const bcrypt = require("bcrypt");
+import express from "express";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import User from "../models/User.js"; // make sure this is ES module too
 
 const router = express.Router();
 
@@ -13,6 +13,7 @@ router.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashedPassword });
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
     const { password: _, ...safeUser } = user.toObject();
     res.json({ token, user: safeUser });
@@ -24,6 +25,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+
   const valid = await bcrypt.compare(password, user?.password || "");
   if (!valid) return res.status(401).send("Invalid credentials");
 
@@ -32,4 +34,4 @@ router.post("/login", async (req, res) => {
   res.json({ token, user: safeUser });
 });
 
-module.exports = router;
+export default router;
