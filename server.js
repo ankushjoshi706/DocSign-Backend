@@ -40,7 +40,11 @@ if (!fs.existsSync(savedSignDir)) {
 // ✅ Global CORS for API and static files
 app.use(
   cors({
-    origin: "https://doc-sign-frontend-fkx3.vercel.app",
+    origin: [
+    'http://doc-sign-frontend-fkx3.vercel.app',
+    'https://doc-sign-frontend-fkx3.vercel.app', // Include both HTTP and HTTPS
+    'http://localhost:3000' // Keep for local development
+  ],
     credentials: true,
   })
 );
