@@ -84,7 +84,7 @@ app.use("/api/email", emailRoutes);
 app.use("/api/auth", authRoutes); // ✅ Register auth routes here
 app.use("/api/signed-docs", signedDocumentsRoutes); // ✅ New signed documents routes
 
-// ✅ DB connection and server start
+/ ✅ DB connection and server start
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -92,10 +92,11 @@ mongoose
   })
   .then(() => {
     console.log("✅ MongoDB connected");
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running at http://localhost:${PORT}`);
-      console.log(`📂 Serving uploads at http://localhost:${PORT}/uploads`);
-      console.log(`📝 Serving signed documents at http://localhost:${PORT}/SavedSign`);
+    // ✅ Fixed: Listen on 0.0.0.0 for Render deployment
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`📂 Serving uploads at port ${PORT}/uploads`);
+      console.log(`📝 Serving signed documents at port ${PORT}/SavedSign`);
       console.log(`💾 Signed documents saved to: ${savedSignDir}`);
     });
   })
